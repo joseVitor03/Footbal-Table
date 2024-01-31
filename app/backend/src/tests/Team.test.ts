@@ -5,7 +5,6 @@ import { mockTeams } from "./mock/mockTeam";
 import { App } from '../app';
 // @ts-ignore
 import chaiHttp = require("chai-http");
-import { ITeams } from "../Interfaces/ITeams";
 
 chai.use(chaiHttp);
 const { expect } = chai;
