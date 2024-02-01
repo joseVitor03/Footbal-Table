@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import * as jwt from 'jsonwebtoken';
 import mapStatusHTTP from '../utils/mapStatusHTTP';
 import MatchesService from '../services/Matches.service';
 
@@ -17,7 +18,16 @@ export default class MatchesController {
 
   async finishMatch(req: Request, res: Response) {
     const { id } = req.params;
-    const { status, data } = await this.matchesService.finishMatch(Number(id));
-    return res.status(mapStatusHTTP(status)).json(data);
+    const { authorization } = req.headers;
+    try {
+      if (authorization) {
+        const [, token] = authorization.split(' ');
+        jwt.verify(token, process.env.JWT_SECRET ?? 'jwt_secret');
+      }
+      const { status, data } = await this.matchesService.finishMatch(Number(id));
+      return res.status(mapStatusHTTP(status)).json(data);
+    } catch (error) {
+      return res.status(401).json({ message: 'Token must be a valid token' });
+    }
   }
 }
