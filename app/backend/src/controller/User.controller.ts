@@ -5,7 +5,6 @@ import mapStatusHTTP from '../utils/mapStatusHTTP';
 import { UserForGetRole } from '../types/User';
 
 export default class UserController {
-  private secretKey = process.env.JWT_SECRET ?? 'jwt_secret';
   constructor(private userService = new UserService()) {}
 
   async login(req: Request, res: Response) {
@@ -19,12 +18,12 @@ export default class UserController {
     try {
       if (authorization) {
         const [, token] = authorization.split(' ');
-        const user = jwt.verify(token, this.secretKey);
+        const user = jwt.verify(token, process.env.JWT_SECRET ?? 'jwt_secret');
         const { status, data } = await this.userService.getRole(user as UserForGetRole);
         return res.status(status).json(data);
       }
     } catch (error) {
-      return res.status(500).json({ message: 'Token must be a valid token' });
+      return res.status(401).json({ message: 'Token must be a valid token' });
     }
   }
 }

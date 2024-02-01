@@ -22,11 +22,11 @@ describe('testes para os users', function () {
   it('testando o retorno do endpoint POST /login', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(mockUser as any);
     sinon.stub(jwt, 'sign').returns('meuToken' as any)
-    sinon.stub(userServices, 'login').resolves({ status: 'SUCCESSFUL', data: { token: 'Bearer meuToken' } })
+    sinon.stub(userServices, 'login').resolves({ status: 'SUCCESSFUL', data: { token: 'meuToken' } })
     const { status, body } = await chai.request(app).post('/login').send({ email: 'admin@admin.com', password: 'secret_admin' });
 
     expect(status).to.be.equal(200);
-    expect(body).to.be.eql({ token: 'Bearer meuToken'});
+    expect(body).to.be.eql({ token: 'meuToken'});
   });
   it('testando o retorno do endpoint POST /login com user não encontrado', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(null);
@@ -46,5 +46,20 @@ describe('testes para os users', function () {
 
     expect(status).to.be.equal(401);
     expect(body).to.be.eql({ message: 'Invalid email or password' });
+  });
+  it('testando o retorno do endpoint GET /login/role', async () => {
+    sinon.stub(SequelizeUsers, 'findOne').resolves(mockUser as any);
+    sinon.stub(jwt, 'verify').returns({ email:'admin@admin.com'} as any)
+    const { status, body } = await chai.request(app).get('/login/role').set('Authorization', 'Bearer meuToken')
+
+    expect(status).to.be.equal(200);
+    expect(body).to.be.eql({ role: 'admin'});
+  });
+  it('testando o retorno do endpoint GET /login/role. token invalido', async () => {
+    sinon.stub(SequelizeUsers, 'findOne').resolves(mockUser as any);
+    const { status, body } = await chai.request(app).get('/login/role').set('Authorization', 'Bearer meuToken')
+
+    expect(status).to.be.equal(401);
+    expect(body).to.be.eql({ message: 'Token must be a valid token'});
   });
 })

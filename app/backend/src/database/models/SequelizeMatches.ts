@@ -1,6 +1,6 @@
 import { Model, DataTypes, InferAttributes,
-  InferCreationAttributes, CreationOptional, ForeignKey } from 'sequelize';
-import { ITeams } from '../../Interfaces/ITeams';
+  InferCreationAttributes, CreationOptional } from 'sequelize';
+// import { ITeams } from '../../Interfaces/ITeams';
 import db from '.';
 import SequelizeTeams from './SequelizeTeams';
 
@@ -8,11 +8,11 @@ class SequelizeMatches extends Model<InferAttributes<SequelizeMatches>,
 InferCreationAttributes<SequelizeMatches>> {
   declare id: CreationOptional<number>;
 
-  declare homeTeamId: ForeignKey<ITeams['id']>;
+  declare homeTeamId: number;
 
   declare homeTeamGoals: number;
 
-  declare awayTeamId: ForeignKey<ITeams['id']>;
+  declare awayTeamId: number;
 
   declare awayTeamGoals: number;
 
@@ -51,11 +51,10 @@ SequelizeMatches.init({
     field: 'in_progress',
   },
 }, {
-  underscored: true,
-  tableName: 'matches',
   modelName: 'matches',
   sequelize: db,
   timestamps: false,
+  underscored: true,
 });
 
 SequelizeMatches.belongsTo(SequelizeTeams, {
@@ -68,11 +67,6 @@ SequelizeMatches.belongsTo(SequelizeTeams, {
   foreignKey: 'away_team_id', // nome da coluna na tabela SequelizeMatches
   targetKey: 'id', // nome da coluna na tabela SequelizeTeams
   as: 'awayTeam', // alias opcional
-});
-
-SequelizeTeams.hasMany(SequelizeMatches, {
-  sourceKey: 'id', // nome da coluna na tabela SequelizeTeams
-  as: 'matches', // alias opcional
 });
 
 export default SequelizeMatches;

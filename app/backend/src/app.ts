@@ -2,6 +2,7 @@ import * as express from 'express';
 import 'express-async-errors';
 import routerTeam from './routes/teamsRoutes';
 import userRoutes from './routes/userRoutes';
+import matchesRouter from './routes/matchesRouter';
 import errorMiddleware from './middlewares/errorMiddleware';
 
 class App {
@@ -36,6 +37,7 @@ class App {
   private routes() {
     this.app.use(routerTeam);
     this.app.use(userRoutes);
+    this.app.use(matchesRouter);
   }
 
   public start(PORT: string | number): void {
