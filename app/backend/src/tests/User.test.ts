@@ -22,11 +22,11 @@ describe('testes para os users', function () {
   it('testando o retorno do endpoint POST /login', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(mockUser as any);
     sinon.stub(jwt, 'sign').returns('meuToken' as any)
-    sinon.stub(userServices, 'login').resolves({ status: 'SUCCESSFUL', data: { token: 'meuToken' } })
+    sinon.stub(userServices, 'login').resolves({ status: 'SUCCESSFUL', data: { token: 'Bearer meuToken' } })
     const { status, body } = await chai.request(app).post('/login').send({ email: 'admin@admin.com', password: 'secret_admin' });
 
     expect(status).to.be.equal(200);
-    expect(body).to.be.eql({ token: 'meuToken'});
+    expect(body).to.be.eql({ token: 'Bearer meuToken'});
   });
   it('testando o retorno do endpoint POST /login com user não encontrado', async () => {
     sinon.stub(SequelizeUsers, 'findOne').resolves(null);

@@ -18,8 +18,14 @@ export default class UserService {
       }
       const payload = { email: user.email, password: user.password };
       const token = jwt.sign(payload, keySecret);
-      return { status: 'SUCCESSFUL', data: { token } };
+      return { status: 'SUCCESSFUL', data: { token: `Bearer ${token}` } };
     }
     return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
+  }
+
+  async getRole(data: { email: string }): Promise<{ status: number,
+    data: { role: string | undefined } }> {
+    const user = await this.userModel.getRole(data.email);
+    return { status: 200, data: { role: user?.role } };
   }
 }
