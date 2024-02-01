@@ -18,7 +18,7 @@ export default class UserService {
       }
       const payload = { email: user.email, password: user.password };
       const token = jwt.sign(payload, keySecret);
-      return { status: 'SUCCESSFUL', data: { token: `Bearer ${token}` } };
+      return { status: 'SUCCESSFUL', data: { token } };
     }
     return { status: 'UNAUTHORIZED', data: { message: 'Invalid email or password' } };
   }
