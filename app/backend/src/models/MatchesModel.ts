@@ -18,4 +18,8 @@ export default class MatchesModel implements IMatchesModel {
       as: 'homeTeam' }, { model: SequelizeTeams, as: 'awayTeam' }] });
     return matches;
   }
+
+  async finishMatch(id: number): Promise<void> {
+    await this.model.update({ inProgress: false }, { where: { id } });
+  }
 }
