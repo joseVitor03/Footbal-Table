@@ -3,6 +3,7 @@ import 'express-async-errors';
 import routerTeam from './routes/teamsRoutes';
 import userRoutes from './routes/userRoutes';
 import matchesRouter from './routes/matchesRouter';
+import leaderBoardRouter from './routes/leaderBoardsRouter';
 import errorMiddleware from './middlewares/errorMiddleware';
 
 class App {
@@ -38,6 +39,7 @@ class App {
     this.app.use(routerTeam);
     this.app.use(userRoutes);
     this.app.use(matchesRouter);
+    this.app.use(leaderBoardRouter);
   }
 
   public start(PORT: string | number): void {
