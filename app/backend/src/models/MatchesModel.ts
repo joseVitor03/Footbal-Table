@@ -1,4 +1,5 @@
 // import SequelizeTeams from '../database/models/SequelizeTeams';
+import { TypeInsertMatches } from '../types/Matches';
 import SequelizeTeams from '../database/models/SequelizeTeams';
 import { IMatches } from '../Interfaces/IMatches';
 import { IMatchesModel } from '../Interfaces/IMatchesModel';
@@ -21,5 +22,27 @@ export default class MatchesModel implements IMatchesModel {
 
   async finishMatch(id: number): Promise<void> {
     await this.model.update({ inProgress: false }, { where: { id } });
+  }
+
+  async updateScoreboard({ id, awayTeamGoals, homeTeamGoals }:
+  { id: number; awayTeamGoals: number; homeTeamGoals: number; }): Promise<[number]> {
+    const update = await this.model.update({ awayTeamGoals, homeTeamGoals }, { where: { id } });
+    return update;
+  }
+
+  async findMatch({ homeTeamId, awayTeamId }: { homeTeamId: number; awayTeamId: number; }):
+  Promise<IMatches | null> {
+    const match = await this.model.findOne({ where: { homeTeamId, awayTeamId } });
+    return match;
+  }
+
+  async insertMatch({ homeTeamId, awayTeamId, awayTeamGoals, homeTeamGoals }: TypeInsertMatches):
+  Promise<IMatches> {
+    const created = await this.model.create({ homeTeamGoals,
+      awayTeamGoals,
+      awayTeamId,
+      homeTeamId,
+      inProgress: true });
+    return created;
   }
 }
