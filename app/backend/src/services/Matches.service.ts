@@ -31,7 +31,6 @@ export default class MatchesService {
 
   async insertMatch({ homeTeamId, awayTeamId, awayTeamGoals, homeTeamGoals }: TypeInsertMatches):
   Promise<ServiceResponse<IMatches>> {
-    const existMatch = await this.matchesModel.findMatch({ homeTeamId, awayTeamId });
     if (homeTeamId === awayTeamId) {
       return { status: 'UNPROCESSABLE',
         data: {

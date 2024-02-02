@@ -7,8 +7,8 @@ export interface IMatchesModel {
   finishMatch(id: number): Promise<void>;
   updateScoreboard({ id, awayTeamGoals, homeTeamGoals }:
   TypeUpdateScore): Promise<[affectedCount: number]>;
-  findMatch({ homeTeamId, awayTeamId }: { homeTeamId: number, awayTeamId: number }):
-  Promise<IMatches | null>;
+  // findMatch({ homeTeamId, awayTeamId }: { homeTeamId: number, awayTeamId: number }):
+  // Promise<IMatches | null>;
   insertMatch({ homeTeamId, awayTeamId, awayTeamGoals, homeTeamGoals }: TypeInsertMatches):
   Promise<IMatches>
 }

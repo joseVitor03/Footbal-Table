@@ -30,11 +30,11 @@ export default class MatchesModel implements IMatchesModel {
     return update;
   }
 
-  async findMatch({ homeTeamId, awayTeamId }: { homeTeamId: number; awayTeamId: number; }):
-  Promise<IMatches | null> {
-    const match = await this.model.findOne({ where: { homeTeamId, awayTeamId } });
-    return match;
-  }
+  // async findMatch({ homeTeamId, awayTeamId }: { homeTeamId: number; awayTeamId: number; }):
+  // Promise<IMatches | null> {
+  //   const match = await this.model.findOne({ where: { homeTeamId, awayTeamId } });
+  //   return match;
+  // }
 
   async insertMatch({ homeTeamId, awayTeamId, awayTeamGoals, homeTeamGoals }: TypeInsertMatches):
   Promise<IMatches> {
