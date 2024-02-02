@@ -32,7 +32,7 @@ export default class MatchesService {
   async insertMatch({ homeTeamId, awayTeamId, awayTeamGoals, homeTeamGoals }: TypeInsertMatches):
   Promise<ServiceResponse<IMatches>> {
     const existMatch = await this.matchesModel.findMatch({ homeTeamId, awayTeamId });
-    if (existMatch) {
+    if (homeTeamId === awayTeamId) {
       return { status: 'UNPROCESSABLE',
         data: {
           message: 'It is not possible to create a match with two equal teams' } };
