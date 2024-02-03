@@ -1,6 +1,21 @@
 import { TypeLeaderBoardHomeTeam } from '../types/LeaderBoard';
 
-type TypeDefaultTable = {
+type TypeDefaultTable<T> = {
+  time: T & {
+    name: string,
+    totalPoints: number,
+    totalGames: number,
+    totalVictories: number,
+    totalDraws: number,
+    totalLosses: number,
+    goalsFavor: number,
+    goalsOwn: number,
+    goalsBalance: number,
+    efficiency: number
+  }
+};
+
+type TypeFinalTable = {
   name: string,
   totalPoints: number,
   totalGames: number,
@@ -13,7 +28,7 @@ type TypeDefaultTable = {
   efficiency: number
 };
 
-const defaultTable = (name: string): TypeDefaultTable => (
+const defaultTable = (name: string) => (
   { name,
     totalPoints: 0,
     totalGames: 0,
@@ -25,13 +40,25 @@ const defaultTable = (name: string): TypeDefaultTable => (
     goalsBalance: 0,
     efficiency: 0 });
 
-function additionalStats(teamStats: TypeDefaultTable) {
-  Object.values(teamStats).map((team: any) => ({
+function additionalStats(teamStats: TypeDefaultTable<string>) {
+  const newTeamStats = Object.values(teamStats).map((team: TypeFinalTable) => ({
     ...team,
     goalsBalance: team.goalsFavor - team.goalsOwn,
     efficiency: ((team.totalPoints / (team.totalGames * 3)) * 100).toFixed(2),
   }));
-  const resultArray = Object.values(teamStats);
+  const resultArray = Object.values(newTeamStats).sort((teamA, teamB) => {
+    if (teamA.totalPoints > teamB.totalPoints) return -1;
+
+    if (teamA.totalPoints < teamB.totalPoints) return 1;
+
+    if (teamA.goalsBalance > teamB.goalsBalance) return -1;
+
+    if (teamA.goalsBalance < teamB.goalsBalance) return 1;
+
+    if (teamA.goalsFavor > teamB.goalsFavor) return -1;
+
+    return 1;
+  });
   return resultArray;
 }
 
