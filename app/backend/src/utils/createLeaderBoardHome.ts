@@ -11,7 +11,7 @@ export type TypeDefaultTable = {
     goalsFavor: number,
     goalsOwn: number,
     goalsBalance: number,
-    efficiency: number
+    efficiency: string
   }
 };
 
@@ -25,10 +25,10 @@ export type TeamStatistics = {
   goalsFavor: number,
   goalsOwn: number,
   goalsBalance: number,
-  efficiency: number
+  efficiency: string
 };
 
-type FinalTable = Omit<TeamStatistics, 'name'>;
+// type FinalTable = Omit<TeamStatistics, 'name'>;
 
 export const defaultTable = (name: string): TypeDefaultTable => (
   { time: {
@@ -41,12 +41,12 @@ export const defaultTable = (name: string): TypeDefaultTable => (
     goalsFavor: 0,
     goalsOwn: 0,
     goalsBalance: 0,
-    efficiency: 0,
+    efficiency: '',
   },
   });
 
-function additionalStatsAndOrderTable(teamStats: Record<string, FinalTable>) {
-  const newTeamStats = Object.values(teamStats).map((team: FinalTable) => ({
+export function additionalStatsAndOrderTable(teamStats: TeamStatistics[]) {
+  const newTeamStats = teamStats.map((team: TeamStatistics) => ({
     ...team,
     goalsBalance: team.goalsFavor - team.goalsOwn,
     efficiency: ((team.totalPoints / (team.totalGames * 3)) * 100).toFixed(2),
@@ -68,7 +68,7 @@ function additionalStatsAndOrderTable(teamStats: Record<string, FinalTable>) {
 }
 
 export default function createLeaderBoardHome(teams: TypeLeaderBoardHomeTeam[]) {
-  const teamStats: Record<string, FinalTable> = {};
+  const teamStats: Record<string, TeamStatistics> = {};
   teams.forEach((match) => {
     const homeTeam = match.homeTeam.teamName;
     if (!teamStats[homeTeam]) teamStats[homeTeam] = defaultTable(homeTeam).time;
@@ -85,5 +85,5 @@ export default function createLeaderBoardHome(teams: TypeLeaderBoardHomeTeam[]) 
       teamStats[homeTeam].totalPoints += 1;
     }
   });
-  return additionalStatsAndOrderTable(teamStats);
+  return additionalStatsAndOrderTable(Object.values(teamStats));
 }

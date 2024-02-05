@@ -5,6 +5,11 @@ const leaderBoardRouter = Router();
 const leaderBoardController = new LeaderBoardController();
 
 leaderBoardRouter.get(
+  '/leaderboard',
+  (req:Request, res: Response) => leaderBoardController.leaderFull(req, res),
+);
+
+leaderBoardRouter.get(
   '/leaderboard/home',
   (req: Request, res: Response) => leaderBoardController.leaderHome(req, res),
 );

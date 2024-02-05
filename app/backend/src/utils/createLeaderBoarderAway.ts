@@ -1,10 +1,10 @@
 import { TypeLeaderBoardAwayTeam } from '../types/LeaderBoard';
 import { defaultTable, TeamStatistics } from './createLeaderBoardHome';
 
-type FinalTable = Omit<TeamStatistics, 'name'>;
+// type FinalTable = Omit<TeamStatistics, 'name'>;
 
-const adicionalStatsAndOrder = (teams: FinalTable[]) => {
-  const statsTeams = teams.map((team: FinalTable) => ({
+export const adicionalStatsAndOrder = (teams: TeamStatistics[]) => {
+  const statsTeams = teams.map((team: TeamStatistics) => ({
     ...team,
     efficiency: ((team.totalPoints / (team.totalGames * 3)) * 100).toFixed(2),
   }));
@@ -20,7 +20,7 @@ const adicionalStatsAndOrder = (teams: FinalTable[]) => {
 };
 
 const createLeaderBoardAway = (teams: TypeLeaderBoardAwayTeam[]) => {
-  const teamStats: Record<string, FinalTable> = {};
+  const teamStats: Record<string, TeamStatistics> = {};
   teams.forEach((match) => {
     const awayTeam = match.awayTeam.teamName;
     if (!teamStats[awayTeam]) teamStats[awayTeam] = defaultTable(awayTeam).time;

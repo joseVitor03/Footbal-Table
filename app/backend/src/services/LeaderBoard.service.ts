@@ -2,6 +2,7 @@ import { TypeLeaderBoardHomeTeam, TypeLeaderBoardAwayTeam } from '../types/Leade
 import LeaderBoarderModel from '../models/LeaderBoardModel';
 import createLeaderBoardHome from '../utils/createLeaderBoardHome';
 import createLeaderBoardAway from '../utils/createLeaderBoarderAway';
+import createLeaderBoardFull from '../utils/createLeaderBoardFull';
 
 export default class LeaderBoardService {
   constructor(private leaderBoardModel = new LeaderBoarderModel()) {}
@@ -16,5 +17,12 @@ export default class LeaderBoardService {
     const teams = await this.leaderBoardModel.leaderAway();
     const table = createLeaderBoardAway(teams as TypeLeaderBoardAwayTeam[]);
     return { status: 200, data: table };
+  }
+
+  async leaderFull() {
+    const teamsHome = await this.leaderHome();
+    const teamsAway = await this.leaderAway();
+    const tableFull = createLeaderBoardFull(teamsHome.data, teamsAway.data);
+    return { status: 200, data: tableFull };
   }
 }
