@@ -10,3 +10,16 @@ export type TypeLeaderBoardHomeTeam = {
     teamName: string,
   }
 };
+
+export type TypeLeaderBoardAwayTeam = {
+  id: number,
+  homeTeamId: number,
+  homeTeamGoals: number,
+  awayTeamId: number,
+  awayTeamGoals: number,
+  inProgress: boolean,
+  awayTeam: {
+    id: number,
+    teamName: string,
+  }
+};

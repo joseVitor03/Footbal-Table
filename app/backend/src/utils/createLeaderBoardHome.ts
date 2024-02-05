@@ -1,7 +1,7 @@
 import { TypeLeaderBoardHomeTeam } from '../types/LeaderBoard';
 
-type TypeDefaultTable<T> = {
-  time: T & {
+export type TypeDefaultTable = {
+  time: {
     name: string,
     totalPoints: number,
     totalGames: number,
@@ -15,7 +15,7 @@ type TypeDefaultTable<T> = {
   }
 };
 
-type TypeFinalTable = {
+export type TeamStatistics = {
   name: string,
   totalPoints: number,
   totalGames: number,
@@ -28,8 +28,11 @@ type TypeFinalTable = {
   efficiency: number
 };
 
-const defaultTable = (name: string) => (
-  { name,
+type FinalTable = Omit<TeamStatistics, 'name'>;
+
+export const defaultTable = (name: string): TypeDefaultTable => (
+  { time: {
+    name,
     totalPoints: 0,
     totalGames: 0,
     totalVictories: 0,
@@ -38,10 +41,12 @@ const defaultTable = (name: string) => (
     goalsFavor: 0,
     goalsOwn: 0,
     goalsBalance: 0,
-    efficiency: 0 });
+    efficiency: 0,
+  },
+  });
 
-function additionalStats(teamStats: TypeDefaultTable<string>) {
-  const newTeamStats = Object.values(teamStats).map((team: TypeFinalTable) => ({
+function additionalStatsAndOrderTable(teamStats: Record<string, FinalTable>) {
+  const newTeamStats = Object.values(teamStats).map((team: FinalTable) => ({
     ...team,
     goalsBalance: team.goalsFavor - team.goalsOwn,
     efficiency: ((team.totalPoints / (team.totalGames * 3)) * 100).toFixed(2),
@@ -63,10 +68,10 @@ function additionalStats(teamStats: TypeDefaultTable<string>) {
 }
 
 export default function createLeaderBoardHome(teams: TypeLeaderBoardHomeTeam[]) {
-  const teamStats = {} as any;
+  const teamStats: Record<string, FinalTable> = {};
   teams.forEach((match) => {
     const homeTeam = match.homeTeam.teamName;
-    if (!teamStats[homeTeam]) teamStats[homeTeam] = defaultTable(homeTeam);
+    if (!teamStats[homeTeam]) teamStats[homeTeam] = defaultTable(homeTeam).time;
     teamStats[homeTeam].totalGames += 1;
     teamStats[homeTeam].goalsFavor += match.homeTeamGoals;
     teamStats[homeTeam].goalsOwn += match.awayTeamGoals;
@@ -80,5 +85,5 @@ export default function createLeaderBoardHome(teams: TypeLeaderBoardHomeTeam[]) 
       teamStats[homeTeam].totalPoints += 1;
     }
   });
-  return additionalStats(teamStats);
+  return additionalStatsAndOrderTable(teamStats);
 }
