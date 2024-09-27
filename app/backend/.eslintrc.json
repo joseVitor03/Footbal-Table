@@ -23,6 +23,15 @@
     "sonarjs",
     "mocha"
   ],
+  "overrides": [
+    {
+      "files": ["src/test/**/*.ts"], // Altere para o caminho correto dos seus testes
+      "rules": {
+        "max-lines-per-function": "off",
+        "prefer-arrow-callback": "off"
+      }
+    },
+  ],
   "rules": {
     "no-underscore-dangle": "off",
     "no-console": "off",
